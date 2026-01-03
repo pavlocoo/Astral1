@@ -13,35 +13,36 @@
 
 -- // Load
 
+-- Wait for everything to load first
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+-- Wait for Players service to be ready
+local players = game:GetService("Players")
+repeat 
+    task.wait(0.1) 
+until players
+
+-- Wait for LocalPlayer (if in client context)
+local localplayer
+repeat
+    task.wait(0.1)
+    localplayer = players.LocalPlayer
+until localplayer or tick() > tick() + 5 -- 5 second timeout
+
 local startupArgs = ({...})[1] or {}
 
 if getgenv().library ~= nil then
     getgenv().library:Unload();
 end
 
-if not game:IsLoaded() then
-    game.Loaded:Wait()
-end
-
 local function gs(a)
     return game:GetService(a)
 end
 
--- // Variables
-local players, http, runservice, inputservice, tweenService, stats, actionservice = gs('Players'), gs('HttpService'), gs('RunService'), gs('UserInputService'), gs('TweenService'), gs('Stats'), gs('ContextActionService')
-local localplayer
-
--- Safely get LocalPlayer
-if players.LocalPlayer then
-    localplayer = players.LocalPlayer
-else
-    -- Wait for LocalPlayer (for client scripts)
-    local startTime = tick()
-    while tick() - startTime < 10 and not players.LocalPlayer do
-        task.wait(0.1)
-    end
-    localplayer = players.LocalPlayer
-end
+-- // Variables - Get services AFTER game is loaded
+local http, runservice, inputservice, tweenService, stats, actionservice = gs('HttpService'), gs('RunService'), gs('UserInputService'), gs('TweenService'), gs('Stats'), gs('ContextActionService')
 
 local floor, ceil, huge, pi, clamp = math.floor, math.ceil, math.huge, math.pi, math.clamp
 local c3new, fromrgb, fromhsv = Color3.new, Color3.fromRGB, Color3.fromHSV
@@ -85,7 +86,7 @@ local library = {
         ['colortrans'] = 'https://raw.githubusercontent.com/portallol/luna/main/modules/trans.png';
     };
     numberStrings = {['Zero'] = 0, ['One'] = 1, ['Two'] = 2, ['Three'] = 3, ['Four'] = 4, ['Five'] = 5, ['Six'] = 6, ['Seven'] = 7, ['Eight'] = 8, ['Nine'] = 9};
-    signal = loadstring(game:HttpGet('https://raw.githubusercontent.com/Quenty/NevermoreEngine/main/src/signal/src/Shared/Signal.lua'))();
+    signal = nil; -- Will be loaded later
     open = false;
     opening = false;
     hasInit = false;
@@ -93,6 +94,12 @@ local library = {
     gamename = startupArgs.gamename or 'universal';
     fileext = startupArgs.fileext or '.txt';
 }
+
+-- Load Signal library safely
+local function loadSignal()
+    local success, result = pcall(function()
+        return loadstring(game:HttpGet('https://raw.githubusercontent.com/Quenty/NevermoreEngine/main/src/signal/src/Shared/Signal.lua', true))()
+    end)
 
 library.themes = {
     {
