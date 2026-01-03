@@ -29,7 +29,21 @@ end
 
 -- // Variables
 local players, http, runservice, inputservice, tweenService, stats, actionservice = gs('Players'), gs('HttpService'), gs('RunService'), gs('UserInputService'), gs('TweenService'), gs('Stats'), gs('ContextActionService')
-local localplayer = players.LocalPlayer
+local localplayer = players.LocalPlayer or nil -- Will be nil if on server
+
+-- Make sure game is fully loaded
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+-- Wait for LocalPlayer if in client context
+if players.LocalPlayer == nil then
+    -- In some contexts (server scripts), LocalPlayer will always be nil
+    -- You need to handle this case
+    localplayer = nil
+else
+    localplayer = players.LocalPlayer
+end
 
 local setByConfig = false
 local floor, ceil, huge, pi, clamp = math.floor, math.ceil, math.huge, math.pi, math.clamp
