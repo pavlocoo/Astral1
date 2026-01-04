@@ -7,6 +7,9 @@ getgenv().textService = game:GetService"TextService"
 getgenv().inputService = game:GetService"UserInputService"
 getgenv().tweenService = game:GetService"TweenService"
 
+if getgenv().library then
+    getgenv().library:Unload()
+end
 
 local library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "CheatX", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "cheatx_cnfgs", fileext = ".txt"}
 getgenv().library = library
@@ -82,6 +85,9 @@ function library:Unload()
             coroutine.resume(coroutine.create(o.SetState, o))
         end
     end
+    library = nil
+    getgenv().library = nil
+end
 
 function library:LoadConfig(config)
     if table.find(self:GetConfigs(), config) then
@@ -2701,9 +2707,5 @@ local function promptLib()
         return Prompt,Screen
     end
 end 
-
-if getgenv().library then
-    getgenv().library:Unload()
-end
 
 --LIBRARY END
