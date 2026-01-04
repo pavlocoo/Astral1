@@ -7,7 +7,11 @@ getgenv().textService = game:GetService"TextService"
 getgenv().inputService = game:GetService"UserInputService"
 getgenv().tweenService = game:GetService"TweenService"
 
-local library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "GrimiX", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "grimix_cnfgs", fileext = ".txt"} -- updated foldername
+if getgenv().library then
+    getgenv().library:Unload()
+end
+
+local library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "CheatX", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "cheatx_cnfgs", fileext = ".txt"}
 getgenv().library = library
 
 --Locals
@@ -44,38 +48,36 @@ end)
 function library:Create(class, properties)
     properties = properties or {}
     if not class then return end
-
-    local drawingClasses = {
-        Square=true, Line=true, Text=true, Quad=true, Circle=true, Triangle=true
-    }
-
-    local inst
-    if drawingClasses[class] and Drawing then
-        inst = Drawing.new(class) -- use Drawing for these classes
-        a = true
-    elseif Instance and Instance.new then
-        inst = Instance.new(class) -- use Roblox instance for everything else
-        a = false
-    else
-        warn("Invalid class: "..tostring(class))
-        return
-    end
-
+    local a = class == "Square" or class == "Line" or class == "Text" or class == "Quad" or class == "Circle" or class == "Triangle"
+    local t = a and Drawing or Instance
+    local inst = t.new(class)
     for property, value in next, properties do
-        pcall(function() inst[property] = value end)
+        inst[property] = value
     end
-
     table.insert(self.instances, {object = inst, method = a})
     return inst
 end
 
+function library:AddConnection(connection, name, callback)
+    callback = type(name) == "function" and name or callback
+    connection = connection:connect(callback)
+    if name ~= callback then
+        self.connections[name] = connection
+    else
+        table.insert(self.connections, connection)
+    end
+    return connection
+end
 
 function library:Unload()
+    for _, c in next, self.connections do
+        c:Disconnect()
+    end
     for _, i in next, self.instances do
         if i.method then
             pcall(function() i.object:Remove() end)
         else
-            pcall(function() i.object:Destroy() end)
+            i.object:Destroy()
         end
     end
     for _, o in next, self.options do
