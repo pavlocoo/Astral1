@@ -7,7 +7,9 @@ getgenv().textService = game:GetService"TextService"
 getgenv().inputService = game:GetService"UserInputService"
 getgenv().tweenService = game:GetService"TweenService"
 
-
+if getgenv().library then
+    getgenv().library:Unload()
+end
 
 local library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "CheatX", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "cheatx_cnfgs", fileext = ".txt"}
 getgenv().library = library
@@ -67,7 +69,16 @@ function library:AddConnection(connection, name, callback)
     return connection
 end
 
-
+function library:Unload()
+    for _, c in next, self.connections do
+        c:Disconnect()
+    end
+    for _, i in next, self.instances do
+        if i.method then
+            pcall(function() i.object:Remove() end)
+        else
+            i.object:Destroy()
+        end
     end
     for _, o in next, self.options do
         if o.type == "toggle" then
