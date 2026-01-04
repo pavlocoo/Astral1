@@ -64,11 +64,6 @@ function library:AddConnection(connection, name, callback)
     end
     return connection
 end
-
-function library:Unload()
-    for _, c in next, self.connections do
-        c:Disconnect()
-    end
     for _, i in next, self.instances do
         if i.method then
             pcall(function() i.object:Remove() end)
