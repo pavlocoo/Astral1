@@ -11,7 +11,7 @@ if getgenv().library then
     getgenv().library:Unload()
 end
 
-local library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "Grimix", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "Grimix_cnfgs", fileext = ".txt"}
+local library = {design = getgenv().design == "Grimix" and "Grimix" or "Grimix", tabs = {}, draggable = true, flags = {}, title = "Grimix", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "Grimix_cnfgs", fileext = ".txt"}
 getgenv().library = library
 
 --Locals
