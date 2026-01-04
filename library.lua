@@ -8,7 +8,8 @@ getgenv().inputService = game:GetService"UserInputService"
 getgenv().tweenService = game:GetService"TweenService"
 
 
-local library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "GrimiX", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "grimix_cnfgs#", fileext = ".txt"}
+
+local library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "CheatX", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "cheatx_cnfgs", fileext = ".txt"}
 getgenv().library = library
 
 --Locals
@@ -67,6 +68,15 @@ function library:AddConnection(connection, name, callback)
 end
 
 
+    end
+    for _, o in next, self.options do
+        if o.type == "toggle" then
+            coroutine.resume(coroutine.create(o.SetState, o))
+        end
+    end
+    library = nil
+    getgenv().library = nil
+end
 
 function library:LoadConfig(config)
     if table.find(self:GetConfigs(), config) then
@@ -2687,6 +2697,4 @@ local function promptLib()
     end
 end 
 
-getgenv().library = library
-return library
-
+--LIBRARY END
