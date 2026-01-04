@@ -2,7 +2,6 @@
 local library = {}
 local pages = {}
 local sections = {}
-local multisections = {}
 local mssections = {}
 local toggles = {}
 local buttons = {}
