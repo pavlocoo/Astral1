@@ -2171,8 +2171,11 @@ function library:AddTab(title, pos)
         end
 
         function column:Init()
-            if self.hasInit then return end
-            self.hasInit = true
+    if self.hasInit then return end
+    self.hasInit = true
+    
+    -- Check if tab is initialized
+    if not self.tab or not library.hasInit then return end
 
             self.main = library:Create("ScrollingFrame", {
                 ZIndex = 2,
