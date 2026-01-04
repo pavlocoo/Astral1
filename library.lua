@@ -7,7 +7,7 @@ getgenv().textService = game:GetService"TextService"
 getgenv().inputService = game:GetService"UserInputService"
 getgenv().tweenService = game:GetService"TweenService"
 
-local library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "GrimiX", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "cheatx_cnfgs", fileext = ".txt"}
+local library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "GrimiX", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "grimix_cnfgs", fileext = ".txt"} -- updated foldername
 getgenv().library = library
 
 --Locals
@@ -44,11 +44,12 @@ end)
 function library:Create(class, properties)
     properties = properties or {}
     if not class then return end
-    local a = class == "Square" or class == "Line" or class == "Text" or class == "Quad" or class == "Circle" or class == "Triangle"
+    local a = class == "Square" or class == "Line" or class == "Text" or class == "Quad" or class == "Circle" or class == "Triangle" or class == "Frame" or class == "TextLabel" -- added Frame/TextLabel so it never fails
     local t = a and Drawing or Instance
+    if not t then return end -- safety
     local inst = t.new(class)
     for property, value in next, properties do
-        inst[property] = value
+        pcall(function() inst[property] = value end) -- safety in case a property fails
     end
     table.insert(self.instances, {object = inst, method = a})
     return inst
@@ -64,11 +65,13 @@ function library:AddConnection(connection, name, callback)
     end
     return connection
 end
+
+function library:Unload()
     for _, i in next, self.instances do
         if i.method then
             pcall(function() i.object:Remove() end)
         else
-            i.object:Destroy()
+            pcall(function() i.object:Destroy() end)
         end
     end
     for _, o in next, self.options do
