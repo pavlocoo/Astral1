@@ -1,5 +1,5 @@
 -- Load Library
-loadstring(game:HttpGet("https://raw.githubusercontent.com/pavlocoo/Astral1/main/main.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/pavlocoo/Astral1/main/libary.lua"))()
 
 -- =========================
 -- [ LEGIT TAB ]
