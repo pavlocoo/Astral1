@@ -82,9 +82,6 @@ function library:Unload()
             coroutine.resume(coroutine.create(o.SetState, o))
         end
     end
-    library = nil
-    getgenv().library = nil
-end
 
 function library:LoadConfig(config)
     if table.find(self:GetConfigs(), config) then
