@@ -2687,4 +2687,6 @@ local function promptLib()
     end
 end 
 
---LIBRARY END
+getgenv().library = library
+return library
+
