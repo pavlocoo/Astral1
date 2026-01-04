@@ -1,5 +1,5 @@
 -- Load Library
-loadstring(game:HttpGet("https://raw.githubusercontent.com/pavlocoo/Astral1/main/libary.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/pavlocoo/Astral1/refs/heads/main/library.lua"))()
 -- [Legit Tab UI] ------------------------------------------------------------------------------------------------------------------------------------------------------------
 local LegitTab = library:AddTab("Legit"); 
 local LegitColunm1 = LegitTab:AddColumn();
