@@ -44,27 +44,31 @@ end)
 function library:Create(class, properties)
     properties = properties or {}
     if not class then return end
-    local a = class == "Square" or class == "Line" or class == "Text" or class == "Quad" or class == "Circle" or class == "Triangle" or class == "Frame" or class == "TextLabel" -- added Frame/TextLabel so it never fails
-    local t = a and Drawing or Instance
-    if not t then return end -- safety
-    local inst = t.new(class)
-    for property, value in next, properties do
-        pcall(function() inst[property] = value end) -- safety in case a property fails
+
+    local drawingClasses = {
+        Square=true, Line=true, Text=true, Quad=true, Circle=true, Triangle=true
+    }
+
+    local inst
+    if drawingClasses[class] and Drawing then
+        inst = Drawing.new(class) -- use Drawing for these classes
+        a = true
+    elseif Instance and Instance.new then
+        inst = Instance.new(class) -- use Roblox instance for everything else
+        a = false
+    else
+        warn("Invalid class: "..tostring(class))
+        return
     end
+
+    for property, value in next, properties do
+        pcall(function() inst[property] = value end)
+    end
+
     table.insert(self.instances, {object = inst, method = a})
     return inst
 end
 
-function library:AddConnection(connection, name, callback)
-    callback = type(name) == "function" and name or callback
-    connection = connection:connect(callback)
-    if name ~= callback then
-        self.connections[name] = connection
-    else
-        table.insert(self.connections, connection)
-    end
-    return connection
-end
 
 function library:Unload()
     for _, i in next, self.instances do
