@@ -16,58 +16,51 @@ local MainTab = Window:AddTab('Game Scripts')
 local LeftGroupBox = MainTab:AddLeftGroupbox('Available Games')
 local RightGroupBox = MainTab:AddRightGroupbox('User Information')
 
--- [[ SCRIPT EXECUTION LOGIC ]]
-local function ExecuteScript(url)
-    task.spawn(function()
-        local success, result = pcall(function()
-            return loadstring(game:HttpGet(url))()
-        end)
-        
-        if success then
-            Library:Notify('✅ Script Executed Successfully!', 3)
-        else
-            Library:Notify('❌ Execution Error: ' .. tostring(result), 5)
-            warn("Grimix Hub Error: " .. result)
-        end
-    end)
-end
-
 -- [[ GAME BUTTONS ]]
+
 LeftGroupBox:AddButton({
     Text = 'Anime Fighting Simulator',
     Func = function()
-        ExecuteScript("https://raw.githubusercontent.com/pavlocoo/Astral1/refs/heads/main/main.lua")
-    end,
-    Tooltip = 'Run Anime Fighting Simulator Script'
+        Library:Notify('Executing Anime Fighting Simulator...', 2)
+        -- Direct URL execution style
+        local scriptRepo = 'https://raw.githubusercontent.com/pavlocoo/Astral1/refs/heads/main/main.lua'
+        loadstring(game:HttpGet(scriptRepo))()
+    end
 })
+
+LeftGroupBox:AddDivider()
 
 LeftGroupBox:AddButton({
     Text = 'Blox Fruits',
     Func = function()
-        -- ExecuteScript("YOUR_BLOX_FRUITS_URL_HERE")
-        Library:Notify('Coming Soon!', 2)
+        Library:Notify('Executing Blox Fruits...', 2)
+        local scriptRepo = 'YOUR_BLOX_FRUITS_URL_HERE'
+        loadstring(game:HttpGet(scriptRepo))()
     end
 })
+
+LeftGroupBox:AddDivider()
 
 LeftGroupBox:AddButton({
     Text = 'Pet Simulator 99',
     Func = function()
-        -- ExecuteScript("YOUR_PS99_URL_HERE")
-        Library:Notify('Coming Soon!', 2)
+        Library:Notify('Executing Pet Simulator 99...', 2)
+        local scriptRepo = 'YOUR_PET_SIM_URL_HERE'
+        loadstring(game:HttpGet(scriptRepo))()
     end
 })
 
 -- [[ FIXED USER INFO SECTION ]]
--- We remove the <b> tags if they aren't rendering and use standard formatting
+-- Clean labels without <b> tags to fix the display issue
 RightGroupBox:AddLabel('User: ' .. game.Players.LocalPlayer.DisplayName)
 RightGroupBox:AddLabel('Status: Verified ✅')
 
--- Improved Game Detection
+-- Fixed Game Detection
 local marketplace = game:GetService("MarketplaceService")
 local success, info = pcall(function() return marketplace:GetProductInfo(game.PlaceId) end)
-local currentGame = success and info.Name or "Unknown Game"
+local gameName = success and info.Name or "Unknown Game"
 
-RightGroupBox:AddLabel('Game: ' .. currentGame)
+RightGroupBox:AddLabel('Game: ' .. gameName)
 
 RightGroupBox:AddDivider()
 
@@ -82,8 +75,7 @@ RightGroupBox:AddButton('Unload Hub', function()
     Library:Unload() 
 end)
 
--- [[ THEME SECTION ]]
-local ThemeGroupBox = MainTab:AddLeftGroupbox('Themes')
+-- [[ THEME MANAGEMENT ]]
 ThemeManager:SetLibrary(Library)
 ThemeManager:SetFolder('GrimixHub')
 ThemeManager:ApplyToTab(MainTab)
