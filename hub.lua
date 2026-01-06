@@ -11,18 +11,28 @@ local MainTab = Window:AddTab('Game Scripts')
 local LeftGroupBox = MainTab:AddLeftGroupbox('Select a Script')
 local RightGroupBox = MainTab:AddRightGroupbox('Account Info')
 
--- [[ SCRIPT BUTTONS ]]
+-- [[ THE EXECUTION FUNCTION ]]
+-- We use this to make sure the script runs in its own "thread"
+local function Execute(url)
+    task.spawn(function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet(url))()
+        end)
+        if not success then
+            Library:Notify('❌ Error: ' .. tostring(err), 5)
+        end
+    end)
+end
+
+-- [[ BUTTONS ]]
 
 LeftGroupBox:AddButton({
     Text = '🚀 Anime Fighting Simulator',
     Func = function()
-        Library:Notify('Executing AFS Script...', 3)
-        
-        -- This is the correct way to load and RUN the script
-        local scriptUrl = "https://raw.githubusercontent.com/pavlocoo/Astral1/refs/heads/main/main.lua"
-        loadstring(game:HttpGet(scriptUrl))()
+        Library:Notify('Executing AFS...', 2)
+        Execute("https://raw.githubusercontent.com/pavlocoo/Astral1/refs/heads/main/main.lua")
     end,
-    Tooltip = 'Loads the Astral1 AFS script'
+    Tooltip = 'Loads Astral1 AFS'
 })
 
 LeftGroupBox:AddDivider()
@@ -30,19 +40,15 @@ LeftGroupBox:AddDivider()
 LeftGroupBox:AddButton({
     Text = '🌊 Blox Fruits',
     Func = function()
-        Library:Notify('Blox Fruits Link Not Set!', 3)
-        -- To add Blox Fruits, put the link below:
-        -- loadstring(game:HttpGet("LINK_HERE"))()
+        Library:Notify('Executing Blox Fruits...', 2)
+        -- Execute("YOUR_BLOX_FRUITS_URL")
     end
 })
 
--- [[ INFO SECTION ]]
+-- [[ RIGHT SIDE INFO ]]
 RightGroupBox:AddLabel('<b>User:</b> ' .. game.Players.LocalPlayer.DisplayName)
 RightGroupBox:AddLabel('<b>Status:</b> <font color="#00ff00">Verified ✅</font>')
 RightGroupBox:AddDivider()
-
-RightGroupBox:AddButton('Unload Hub', function() 
-    Library:Unload() 
-end)
+RightGroupBox:AddButton('Unload Hub', function() Library:Unload() end)
 
 Library:Notify('Grimix Hub Ready!')
