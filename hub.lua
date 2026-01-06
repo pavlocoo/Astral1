@@ -23,7 +23,7 @@ LeftGroupBox:AddButton({
     Func = function()
         Library:Notify('🚀 Executing Anime Fighting Simulator...', 3)
         -- This executes your actual script
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/pavlocoo/Astral1/refs/heads/main/main.lua"))()
+        local repo = 'https://raw.githubusercontent.com/pavlocoo/Astral1/refs/heads/main/main.lua'
     end,
     DoubleClick = false,
     Tooltip = 'Loads the latest Anime Fighting Simulator script'
