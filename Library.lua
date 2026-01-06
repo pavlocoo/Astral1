@@ -1885,45 +1885,48 @@ do
             { BorderColor3 = 'Black' }
         );
 
-        function Toggle:UpdateColors()
+function Toggle:UpdateColors()
             Toggle:Display();
         end;
-
+        
         if type(Info.Tooltip) == 'string' then
             Library:AddToolTip(Info.Tooltip, ToggleRegion)
         end
-
+        
         function Toggle:Display()
             ToggleInner.BackgroundColor3 = Toggle.Value and Library.AccentColor or Library.MainColor;
             ToggleInner.BorderColor3 = Toggle.Value and Library.AccentColorDark or Library.OutlineColor;
-
             Library.RegistryMap[ToggleInner].Properties.BackgroundColor3 = Toggle.Value and 'AccentColor' or 'MainColor';
             Library.RegistryMap[ToggleInner].Properties.BorderColor3 = Toggle.Value and 'AccentColorDark' or 'OutlineColor';
         end;
-
+        
         function Toggle:OnChanged(Func)
             Toggle.Changed = Func;
             Func(Toggle.Value);
         end;
-
+        
         function Toggle:SetValue(Bool)
             Bool = (not not Bool);
-
+            
             Toggle.Value = Bool;
             Toggle:Display();
-
+            
             for _, Addon in next, Toggle.Addons do
                 if Addon.Type == 'KeyPicker' and Addon.SyncToggleState then
                     Addon.Toggled = Bool
                     Addon:Update()
                 end
             end
-
+            
             Library:SafeCallback(Toggle.Callback, Toggle.Value);
             Library:SafeCallback(Toggle.Changed, Toggle.Value);
             Library:UpdateDependencyBoxes();
         end;
-
+        
+        function Toggle:StopToggle()
+            Toggle:SetValue(false);
+        end;
+        
         ToggleRegion.InputBegan:Connect(function(Input)
             if Input.UserInputType == Enum.UserInputType.MouseButton1 and not Library:MouseIsOverOpenedFrame() then
                 Toggle:SetValue(not Toggle.Value) -- Why was it not like this from the start?
