@@ -1,6 +1,5 @@
 local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
-local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 
 local Window = Library:CreateWindow({
     Title = 'Grimix Hub | Premium Selector',
@@ -10,7 +9,9 @@ local Window = Library:CreateWindow({
     MenuFadeTime = 0.2
 })
 
+-- [[ MAIN TAB ]]
 local MainTab = Window:AddTab('Game Scripts')
+
 local LeftGroupBox = MainTab:AddLeftGroupbox('Select a Script')
 local RightGroupBox = MainTab:AddRightGroupbox('User Information')
 
@@ -19,10 +20,10 @@ local RightGroupBox = MainTab:AddRightGroupbox('User Information')
 LeftGroupBox:AddButton({
     Text = 'Anime Fighting Simulator',
     Func = function()
-        Library:Notify('Unloading Hub and Loading AFS...', 2)
+        Library:Notify('Destroying Hub and Loading AFS...', 2)
         
         task.wait(0.5)
-        Library:Unload() -- This makes the Hub disappear
+        Library:Unload() -- This completely destroys the Hub UI
         
         local scriptRepo = 'https://raw.githubusercontent.com/pavlocoo/Astral1/refs/heads/main/main.lua'
         loadstring(game:HttpGet(scriptRepo))()
@@ -34,35 +35,35 @@ LeftGroupBox:AddDivider()
 LeftGroupBox:AddButton({
     Text = 'Blox Fruits',
     Func = function()
-        Library:Notify('Unloading Hub and Loading Blox Fruits...', 2)
+        Library:Notify('Destroying Hub and Loading Blox Fruits...', 2)
         
         task.wait(0.5)
-        Library:Unload() -- This makes the Hub disappear
+        Library:Unload() -- This completely destroys the Hub UI
         
         local scriptRepo = 'YOUR_BLOX_FRUITS_URL_HERE'
         loadstring(game:HttpGet(scriptRepo))()
     end
 })
 
--- [[ CLEAN USER INFO ]]
-RightGroupBox:AddLabel('User: ' .. game.Players.LocalPlayer.DisplayName)
+-- [[ DETAILED USER INFO ]]
+RightGroupBox:AddLabel('User: ' .. game.Players.LocalPlayer.Name)
+RightGroupBox:AddLabel('Display: ' .. game.Players.LocalPlayer.DisplayName)
+RightGroupBox:AddLabel('User ID: ' .. game.Players.LocalPlayer.UserId)
+RightGroupBox:AddLabel('Account Age: ' .. game.Players.LocalPlayer.AccountAge .. ' days')
+RightGroupBox:AddDivider()
 RightGroupBox:AddLabel('Status: Verified ✅')
 
+-- Game Detection
 local marketplace = game:GetService("MarketplaceService")
 local success, info = pcall(function() return marketplace:GetProductInfo(game.PlaceId) end)
 local gameName = success and info.Name or "Unknown Game"
-RightGroupBox:AddLabel('Game: ' .. gameName)
+RightGroupBox:AddLabel('Current Game: ' .. gameName)
 
 RightGroupBox:AddDivider()
 
-RightGroupBox:AddButton('Unload Hub', function() 
+-- Destroyer Button
+RightGroupBox:AddButton('Destroy Hub', function() 
     Library:Unload() 
 end)
 
--- [[ THEME MANAGEMENT ]]
-ThemeManager:SetLibrary(Library)
-ThemeManager:SetFolder('GrimixHub')
-ThemeManager:ApplyToTab(MainTab)
-ThemeManager:BuildConfigSection(MainTab)
-
-Library:Notify('Grimix Hub Loaded!')
+Library:Notify('Grimix Hub: Session Started')
